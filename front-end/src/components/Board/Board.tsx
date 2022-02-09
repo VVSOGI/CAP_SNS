@@ -22,6 +22,7 @@ import {
   WriteLine,
 } from "./styles";
 import styled from "styled-components";
+import { getToken } from "../../db/token";
 
 const RightContainer = styled.section`
   flex: 5;
@@ -56,10 +57,10 @@ const Board = () => {
   );
   const dispatch = useDispatch();
 
-  const handleCreatePost = () => {
+  const handleCreatePost = async () => {
     // Post 생성
     if (writeContent.length > 0) {
-      createPostsApi(writeContent);
+      await createPostsApi(writeContent);
       dispatch(getPosts(""));
       setWriteContent("");
     }
@@ -72,9 +73,9 @@ const Board = () => {
     setWriteContent("");
   };
 
-  const handleRemovePost = (id: number) => {
+  const handleRemovePost = async (id: number) => {
     // Post 제거
-    deletePostsApi(id);
+    await deletePostsApi(id);
     dispatch(getPosts(""));
   };
 
@@ -85,11 +86,11 @@ const Board = () => {
     setIsWriteClick(true);
   };
 
-  const handlePatchPostAfterText = () => {
+  const handlePatchPostAfterText = async () => {
     // Post 업데이트 완료
     const [targetId, isFix] = isFixMode;
     if (isFix) {
-      updatePostsApi(Number(targetId), writeContent);
+      await updatePostsApi(Number(targetId), writeContent);
       setWriteContent("");
       setIsFixMode([-1, false]);
       setIsWriteClick(false);
@@ -99,6 +100,8 @@ const Board = () => {
 
   useEffect(() => {
     // Posts 데이터 호출
+    console.log(getToken());
+
     dispatch(getPosts(""));
   }, [dispatch]);
 

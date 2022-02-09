@@ -4,7 +4,7 @@ import Nav from "../../components/Nav/Nav";
 const Mainpage = () => {
   return (
     <>
-      <Nav />
+      <Nav isLogin={true} />
       <Board />
     </>
   );

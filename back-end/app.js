@@ -4,6 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import "express-async-errors";
 import postRouter from "./router/posts.js";
+import authRouter from "./router/auth.js";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(helmet());
 app.use(morgan("tiny"));
 
 app.use("/posts", postRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);

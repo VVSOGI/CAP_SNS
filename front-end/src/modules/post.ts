@@ -9,7 +9,7 @@ export const getPosts = (username: string) => async (dispatch: Dispatch) => {
   dispatch({ type: GET_POSTS });
   try {
     const posts = await getPostsApi(username);
-    console.log(posts);
+
     dispatch({ type: GET_POSTS_SUCCESS, posts });
   } catch (e) {
     dispatch({ type: GET_POSTS_ERROR, error: e });

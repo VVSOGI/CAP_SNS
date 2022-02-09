@@ -19,8 +19,8 @@ export async function getById(req, res, next) {
 }
 
 export async function create(req, res) {
-  const { text, name, username } = req.body;
-  const posts = await postRepository.create(text, name, username);
+  const { text } = req.body;
+  const posts = await postRepository.create(text, req.userId);
   return res.status(201).json(posts);
 }
 

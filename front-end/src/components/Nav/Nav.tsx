@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { clearToken } from "../../db/token";
+import { useNav } from "../../router/useNav";
 
 const NavContainer = styled.div`
   width: 100%;
@@ -30,13 +32,30 @@ const NavIcon = styled.div`
   font-size: 2em;
 `;
 
-const RightContainer = styled.div`
+const RightContainer = styled.div<NavStylesProps>`
   width: 30%;
-  display: flex;
+  display: ${(props) => {
+    return props.isLogin ? "flex" : "none";
+  }};
   justify-content: space-around;
+  span {
+    cursor: pointer;
+    :hover {
+      color: #2758c2;
+    }
+  }
 `;
 
-const Nav = () => {
+type NavStylesProps = {
+  isLogin?: boolean;
+};
+
+type NavPropsType = {
+  isLogin?: boolean;
+};
+
+const Nav: React.FC<NavPropsType> = ({ isLogin }) => {
+  const handleNavigate = useNav();
   return (
     <NavContainer>
       <LeftContainer>
@@ -44,10 +63,17 @@ const Nav = () => {
         <span className="app-title">CAP</span>
         <span className="userinfo">@User</span>
       </LeftContainer>
-      <RightContainer>
+      <RightContainer isLogin={isLogin}>
         <span>All posts</span>
         <span>My posts</span>
-        <span>Logout</span>
+        <span
+          onClick={() => {
+            handleNavigate("/");
+            clearToken();
+          }}
+        >
+          Logout
+        </span>
       </RightContainer>
     </NavContainer>
   );

@@ -1,43 +1,55 @@
+import * as userRepository from "./auth.js";
+
 let posts = [
   {
     id: "1",
-    text: "취업 가즈아아아ㅏㅏ",
-    createdAt: Date.now().toString(),
-    name: "Tom",
-    username: "Tom",
-    url: "https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png",
+    text: "드림코더분들 화이팅!",
+    createdAt: new Date().toString(),
+    userId: "1",
   },
   {
     id: "2",
-    text: "hi!",
-    createdAt: Date.now().toString(),
-    name: "Ellie",
-    username: "Ellie",
+    text: "안뇽!",
+    createdAt: new Date().toString(),
+    userId: "1",
   },
 ];
 
 export async function getAll() {
-  return posts;
+  return Promise.all(
+    posts.map(async (post) => {
+      const { username, name, url } = await userRepository.findById(
+        post.userId
+      );
+      return { ...post, username, name, url };
+    })
+  );
 }
 
 export async function getAllByUsername(username) {
-  return posts.filter((post) => post.username === username);
+  return getAll().then((posts) =>
+    posts.filter((post) => post.username === username)
+  );
 }
 
 export async function getById(id) {
-  return posts.find((post) => post.id === id);
+  const found = posts.find((post) => post.userId === id);
+  if (!found) {
+    return null;
+  }
+  const { username, name, url } = await userRepository.findById(found.userId);
+  return { ...found, username, name, url };
 }
 
-export async function create(text, name, username) {
+export async function create(text, userId) {
   const post = {
-    id: Date.now().toString(),
+    id: new Date().toString(),
     text,
     createdAt: new Date(),
-    name,
-    username,
+    userId,
   };
   posts = [post, ...posts];
-  return posts;
+  return getById(post.id);
 }
 
 export async function update(id, text) {
@@ -45,7 +57,7 @@ export async function update(id, text) {
   if (post) {
     post.text = text;
   }
-  return post;
+  return getById(post.id);
 }
 
 export async function remove(id) {
