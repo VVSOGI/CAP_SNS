@@ -15,7 +15,7 @@ export type PostStylesType = {
 type PostPropsType = {
   removeCallback: (id: number) => void;
   patchCallback: (id: number, text: string) => void;
-  id: string;
+  id: number;
   username: string;
   name: string;
   time: string;
@@ -45,10 +45,10 @@ const Post: React.FC<PostPropsType> = ({
           <span className="username">{username}</span>
           <span className="name">{`@${name}`}</span>
           <span className="time">🕐 {time}</span>
-          <span onClick={() => patchCallback(Number(id), text)} className="fix">
+          <span onClick={() => patchCallback(id, text)} className="fix">
             🛠
           </span>
-          <span onClick={() => removeCallback(Number(id))} className="remove">
+          <span onClick={() => removeCallback(id)} className="remove">
             ❌
           </span>
         </RightTopContainer>

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getToken, saveToken } from "../db/token";
-import { handleMakeJsonStr, headers, headersWithCookie, URL } from "./constant";
+import { saveToken } from "../db/token";
+import { handleMakeJsonStr, headers, URL } from "./constant";
 
 type SignupResType = {
   data: { token: string };

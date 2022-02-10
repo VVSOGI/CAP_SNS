@@ -22,7 +22,6 @@ import {
   WriteLine,
 } from "./styles";
 import styled from "styled-components";
-import { getToken } from "../../db/token";
 
 const RightContainer = styled.section`
   flex: 5;
@@ -100,8 +99,6 @@ const Board = () => {
 
   useEffect(() => {
     // Posts 데이터 호출
-    console.log(getToken());
-
     dispatch(getPosts(""));
   }, [dispatch]);
 

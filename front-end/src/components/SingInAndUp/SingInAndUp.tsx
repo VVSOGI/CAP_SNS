@@ -49,9 +49,18 @@ const InputContainer = styled.div`
 `;
 
 type SingInAndUpPropsType = {
-  handleNavigate: (path: string) => void;
+  handleSignup: (
+    username: string,
+    password: string,
+    name: string,
+    email: string
+  ) => Promise<void>;
+  handleSignin: (username: string, password: string) => Promise<void>;
 };
-const SingInAndUp: React.FC<SingInAndUpPropsType> = ({ handleNavigate }) => {
+const SingInAndUp: React.FC<SingInAndUpPropsType> = ({
+  handleSignin,
+  handleSignup,
+}) => {
   const [changeSign, setChangeSign] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -73,23 +82,6 @@ const SingInAndUp: React.FC<SingInAndUpPropsType> = ({ handleNavigate }) => {
         return setEmail(value);
       default:
     }
-  };
-
-  const handleSignup = async () => {
-    try {
-      await signUp(username, password, name, email, "");
-      handleNavigate("/main");
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleSignin = async () => {
-    Login(username, password)
-      .then((item) => {
-        handleNavigate("/main");
-      })
-      .catch((e) => console.error(e));
   };
 
   return (
@@ -151,11 +143,17 @@ const SingInAndUp: React.FC<SingInAndUpPropsType> = ({ handleNavigate }) => {
           <span>회원가입이 필요하시면 왼쪽 버튼을 눌러주세요.</span>
         </div>
         {changeSign ? (
-          <button onClick={handleSignup} className="signInbtn">
+          <button
+            onClick={() => handleSignup(username, password, name, email)}
+            className="signInbtn"
+          >
             Sign Up
           </button>
         ) : (
-          <button onClick={handleSignin} className="signInbtn">
+          <button
+            onClick={() => handleSignin(username, password)}
+            className="signInbtn"
+          >
             Sign In
           </button>
         )}

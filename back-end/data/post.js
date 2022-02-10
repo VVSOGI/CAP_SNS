@@ -33,7 +33,7 @@ export async function getAllByUsername(username) {
 }
 
 export async function getById(id) {
-  const found = posts.find((post) => post.userId === id);
+  const found = posts.find((post) => post.id == id);
   if (!found) {
     return null;
   }
@@ -43,17 +43,18 @@ export async function getById(id) {
 
 export async function create(text, userId) {
   const post = {
-    id: new Date().toString(),
+    id: Date.now(),
     text,
     createdAt: new Date(),
     userId,
   };
+
   posts = [post, ...posts];
   return getById(post.id);
 }
 
 export async function update(id, text) {
-  const post = posts.find((post) => post.id === id);
+  const post = posts.find((post) => post.id == id);
   if (post) {
     post.text = text;
   }
@@ -61,5 +62,5 @@ export async function update(id, text) {
 }
 
 export async function remove(id) {
-  posts = posts.filter((post) => post.id !== id);
+  posts = posts.filter((post) => post.id != id);
 }

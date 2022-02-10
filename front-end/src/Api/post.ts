@@ -7,7 +7,8 @@ export type getPostsDataType = {
 };
 
 export type getPostsEachData = {
-  id: string;
+  id: number;
+  userId: string;
   text: string;
   createdAt: string;
   name: string;
@@ -18,8 +19,6 @@ export type getPostsEachData = {
 
 export const getPostsApi = async (username: string) => {
   const query = username ? `?username=${username}` : "";
-  console.log(query, headersWithCookie());
-
   const response = await axios.get(URL + "/posts" + query, headersWithCookie());
   const data: getPostsDataType = response.data;
 
