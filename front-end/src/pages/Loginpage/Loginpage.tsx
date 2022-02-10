@@ -13,19 +13,14 @@ const Loginpage = () => {
     email: string
   ) => {
     try {
-      await signUp(username, password, name, email, "");
-      handleNavigate("/main");
-    } catch (e) {
-      console.log(e);
-    }
+      const signup = await signUp(username, password, name, email, "");
+      handleNavigate("/main", { state: signup.data.username });
+    } catch (e) {}
   };
 
   const handleSignin = async (username: string, password: string) => {
-    Login(username, password)
-      .then((item) => {
-        handleNavigate("/main");
-      })
-      .catch((e) => console.error(e));
+    const login = await Login(username, password);
+    handleNavigate("/main", { state: login.data.username });
   };
 
   return (

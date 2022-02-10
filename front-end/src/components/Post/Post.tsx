@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PostContainer,
   LeftContainer,
@@ -16,7 +16,8 @@ type PostPropsType = {
   removeCallback: (id: number) => void;
   patchCallback: (id: number, text: string) => void;
   id: number;
-  username: string;
+  postOwner: string;
+  username: unknown;
   name: string;
   time: string;
   text: string;
@@ -24,17 +25,28 @@ type PostPropsType = {
 
 const Post: React.FC<PostPropsType> = ({
   id,
-  username,
   name,
   time,
   text,
+  username,
+  postOwner,
   removeCallback,
   patchCallback,
 }) => {
   const [click, setClick] = useState(false);
 
+  const handleIsMyPost = (currentUser: unknown, postOwner: string) => {
+    const check = currentUser === postOwner;
+    if (check) {
+      setClick(!click);
+    }
+  };
+
   return (
-    <PostContainer isClick={click} onClick={() => setClick(!click)}>
+    <PostContainer
+      isClick={click}
+      onClick={() => handleIsMyPost(username, postOwner)}
+    >
       <LeftContainer>
         <LeftBox>
           <span>A</span>
@@ -42,7 +54,7 @@ const Post: React.FC<PostPropsType> = ({
       </LeftContainer>
       <RightTotalContainer>
         <RightTopContainer isClick={click}>
-          <span className="username">{username}</span>
+          <span className="username">{postOwner}</span>
           <span className="name">{`@${name}`}</span>
           <span className="time">🕐 {time}</span>
           <span onClick={() => patchCallback(id, text)} className="fix">

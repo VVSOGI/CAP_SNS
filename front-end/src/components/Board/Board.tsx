@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import TextareaAutosize from "react-textarea-autosize";
 import Button from "../Button/Button";
 import { useEffect, useState } from "react";
@@ -22,6 +23,8 @@ import {
   WriteLine,
 } from "./styles";
 import styled from "styled-components";
+import { useNav } from "../../router/useNav";
+import { useLocation } from "react-router-dom";
 
 const RightContainer = styled.section`
   flex: 5;
@@ -49,17 +52,24 @@ const Board = () => {
   const [writeContent, setWriteContent] = useState("");
   const [isWriteClick, setIsWriteClick] = useState(false);
   const [isFixMode, setIsFixMode] = useState([-1, false]);
+  const [isToken, setIsToken] = useState(true);
   const [line, setLine] = useState(false);
 
   const { posts, error, loading } = useSelector(
     (state: RootState) => state.posts.posts
   );
   const dispatch = useDispatch();
+  const navigation = useNav();
+  const { state } = useLocation();
 
   const handleCreatePost = async () => {
     // Post 생성
     if (writeContent.length > 0) {
-      await createPostsApi(writeContent);
+      try {
+        await createPostsApi(writeContent);
+      } catch (e) {
+        setIsToken(false);
+      }
       dispatch(getPosts(""));
       setWriteContent("");
     }
@@ -74,7 +84,11 @@ const Board = () => {
 
   const handleRemovePost = async (id: number) => {
     // Post 제거
-    await deletePostsApi(id);
+    try {
+      await deletePostsApi(id);
+    } catch (e) {
+      setIsToken(false);
+    }
     dispatch(getPosts(""));
   };
 
@@ -89,7 +103,11 @@ const Board = () => {
     // Post 업데이트 완료
     const [targetId, isFix] = isFixMode;
     if (isFix) {
-      await updatePostsApi(Number(targetId), writeContent);
+      try {
+        await updatePostsApi(Number(targetId), writeContent);
+      } catch (e) {
+        setIsToken(false);
+      }
       setWriteContent("");
       setIsFixMode([-1, false]);
       setIsWriteClick(false);
@@ -98,9 +116,19 @@ const Board = () => {
   };
 
   useEffect(() => {
+    if (!isToken) navigation("/");
+    return () => {
+      setWriteContent("");
+      setIsWriteClick(false);
+      setLine(false);
+      setIsFixMode([-1, false]);
+    };
+  }, [isToken]);
+
+  useEffect(() => {
     // Posts 데이터 호출
     dispatch(getPosts(""));
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (isWriteClick) {
@@ -159,10 +187,11 @@ const Board = () => {
           <Post
             key={item.id}
             id={item.id}
-            username={item.username}
+            postOwner={item.username}
             name={item.name}
             text={item.text}
             time={item.createdAt}
+            username={state}
             removeCallback={handleRemovePost}
             patchCallback={handlePatchPostBeforeText}
           />

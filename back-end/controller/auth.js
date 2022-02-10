@@ -4,7 +4,7 @@ import {} from "express-async-errors";
 import * as userRepository from "../data/auth.js";
 
 const jwtSecretKey = "spacewhale";
-const jwtExpiresInDays = "2d";
+const jwtExpiresInDays = "1d";
 const bcryptSaltRounds = 12;
 
 export async function signup(req, res) {

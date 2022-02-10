@@ -1,9 +1,9 @@
 import axios from "axios";
 import { saveToken } from "../db/token";
-import { handleMakeJsonStr, headers, URL } from "./constant";
+import { handleMakeJsonStr, headers, headersWithCookie, URL } from "./constant";
 
 type SignupResType = {
-  data: { token: string };
+  data: { token: string; username: string };
 };
 
 const auth = "/auth";
@@ -39,6 +39,6 @@ export const Login = async (username: string, password: string) => {
 };
 
 export const AuthCheck = async () => {
-  // const response = await axios.get(URL + auth + "/me", headersWithCookie);
-  // return response;
+  const response = await axios.get(URL + auth + "/me", headersWithCookie());
+  return response;
 };
