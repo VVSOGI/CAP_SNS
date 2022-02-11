@@ -1,3 +1,4 @@
+import { getSocketIo } from "../connection/socket.js";
 import * as postRepository from "../data/post.js";
 
 export async function getPosts(req, res) {
@@ -21,7 +22,8 @@ export async function getById(req, res, next) {
 export async function create(req, res) {
   const { text } = req.body;
   const posts = await postRepository.create(text, req.userId);
-  return res.status(201).json(posts);
+  res.status(201).json(posts);
+  getSocketIo().emit("posts", posts);
 }
 
 export async function update(req, res, next) {

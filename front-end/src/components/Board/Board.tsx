@@ -25,6 +25,7 @@ import {
 import styled from "styled-components";
 import { useNav } from "../../router/useNav";
 import { useLocation } from "react-router-dom";
+import { callSocket, onSync } from "../../network/socket";
 
 const RightContainer = styled.section`
   flex: 5;
@@ -72,6 +73,8 @@ const Board = () => {
       }
       dispatch(getPosts(""));
       setWriteContent("");
+      let io = callSocket();
+      onSync(io, "posts");
     }
   };
 

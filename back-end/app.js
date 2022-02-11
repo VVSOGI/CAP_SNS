@@ -6,6 +6,8 @@ import "express-async-errors";
 import postRouter from "./router/posts.js";
 import authRouter from "./router/auth.js";
 import { config } from "./config.js";
+import { Server } from "socket.io";
+import { initSocket } from "./connection/socket.js";
 
 const app = express();
 
@@ -26,4 +28,5 @@ app.use((error, req, res, next) => {
   res.sendStatus(500);
 });
 
-app.listen(config.host.port);
+const server = app.listen(config.host.port);
+initSocket(server);
